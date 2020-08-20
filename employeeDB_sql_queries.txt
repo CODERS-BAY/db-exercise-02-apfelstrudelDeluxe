@@ -1,0 +1,11 @@
+SELECT * FROM employees;
+SELECT first_name, last_name FROM employees;
+SELECT last_name FROM employees ORDER BY last_name asc;
+SELECT DISTINCT manager_id FROM employees;
+SELECT employee_id FROM employees WHERE manager_id = 100;
+
+SELECT country_name FROM countries;
+SELECT city, country_id FROM locations;
+SELECT region_name AS 'Region' FROM regions;
+SELECT job_title FROM jobs ORDER BY job_title ASC;
+SELECT DISTINCT location_id FROM departments;
