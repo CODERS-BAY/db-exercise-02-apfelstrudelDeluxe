@@ -136,10 +136,11 @@ JOIN employees m ON e.manager_id = m.employee_id;
 -- suche in Zeile manager_id die passende employer_id und gebe last_name aus
 
 
--- JOIN EXERCISES --
+-- JOIN EXERCISES 21.8.2020 --
 SELECT countries.country_name, regions.region_name
 FROM countries
 JOIN regions ON countries.region_id = regions.region_id;
+-- suche in Zeile countries.region_id die passende regions.region_id aus regions & Ausgabe: regions.regions_name
 
 SELECT employees.first_name, employees.last_name, departments.department_name
 FROM employees
@@ -157,4 +158,109 @@ SELECT employees.first_name, employees.last_name, job_history.start_date, job_hi
 FROM employees
 JOIN job_history ON employees.employee_id = job_history.employee_id
 JOIN jobs ON job_history.job_id = jobs.job_id;
+
+-- SELECT EXERCISES 25.8.2020 --
+--#1
+SELECT employee_id AS Angestelltennummer, last_name AS Nachname, job_id, hire_date AS STARTDATE
+FROM employees;
+
+--#2
+SELECT DISTINCT job_id FROM employees;
+
+--#3
+SELECT employee_id AS 'EMP #', job_id AS 'Job', last_name AS 'Employee', hire_date AS 'Hire Date'
+FROM employees;
+
+--#4
+SELECT last_name AS 'Nachname', salary AS 'Gehalt > 12.000 USD'
+FROM employees
+WHERE salary > 12000;
+
+--#5
+SELECT last_name AS 'Nachname', department_id AS 'Abteilungsnummer'
+FROM employees
+WHERE employee_id = 176;
+
+--#6
+SELECT last_name AS 'Nachname', job_id AS 'Job-Kennung', hire_date AS 'Einstellungsdatum'
+FROM employees
+ORDER BY last_name ASC;
+
+--#7
+SELECT last_name AS 'Nachname', department_id AS 'Abteilungsnummer'
+FROM employees
+WHERE department_id = 20 ORDER BY last_name ASC;
+
+--#8
+SELECT last_name AS 'Employee', salary AS 'Monthly Salary', commission_pct AS 'Commission'
+FROM employees
+WHERE commission_pct = 0.20;
+
+
+-- JOIN more exercises --
+-------------------------
+-- excel SVERWEIS difference --
+SELECT employees.last_name, departments.department_name
+FROM employees
+JOIN departments ON employees.department_id = departments.department_id;
+
+SELECT departments.department_name, employees.last_name
+FROM departments
+JOIN employees ON departments.department_id = employees.department_id;
+
+-- CROSS JOIN --
+SELECT employees.last_name, departments.department_name
+FROM employees
+CROSS JOIN departments;
+
+
+-- JOIN EXERCISES 25.8.2020 --
+--#1
+SELECT jobs.job_title, SUM(employees.salary)
+FROM jobs
+JOIN employees ON jobs.job_id = employees.job_id
+WHERE jobs.job_id LIKE ('S%') -- erster Filter
+GROUP BY job_title HAVING SUM(employees.salary) < 20000 -- wie ein Teilergebnis
+ORDER BY job_title DESC; -- Sortierung
+
+--#2
+SELECT avg(salary)
+FROM employees;
+
+--#3
+SELECT employees.first_name AS Vorname, employees.last_name AS Nachname, departments.department_name AS Abteilungsname
+FROM employees
+JOIN departments ON employees.department_id = departments.department_id;
+
+--#4
+SELECT departments.department_name, locations.postal_code, locations.city, locations.state_province, locations.street_address
+FROM departments
+JOIN locations ON departments.location_id = locations.location_id;
+
+--#5
+SELECT departments.department_name, locations.postal_code, locations.city, locations.state_province, locations.street_address, countries.country_name
+FROM departments
+JOIN locations ON departments.location_id = locations.location_id
+JOIN countries ON locations.country_id = countries.country_id;
+
+--#6
+SELECT departments.department_name, locations.postal_code, locations.city, locations.state_province, locations.street_address, countries.country_name,
+       CONCAT(employees.first_name, ' ', employees.last_name) AS Manager
+FROM departments
+JOIN locations ON departments.location_id = locations.location_id
+JOIN countries ON locations.country_id = countries.country_id
+JOIN employees ON departments.manager_id = employees.manager_id;
+
+--#7
+SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Name, jobs.job_title AS Job, employees.salary, departments.department_name
+FROM employees
+JOIN jobs ON employees.job_id = jobs.job_id
+JOIN departments ON employees.department_id = departments.department_id;
+
+--#8
+SELECT m.last_name AS 'Manager', e.last_name AS Unterstellter
+FROM employees e
+JOIN employees m ON e.manager_id = m.employee_id
+ORDER BY e.manager_id ASC;
+
 
